@@ -19,6 +19,9 @@ export const vectorize = async (input: string): Promise<number[]> => {
 
 
 
+
+
+
 // import { openai } from "./openai";
 
 // const MAX_RETRIES = 3;

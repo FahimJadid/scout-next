@@ -1,5 +1,7 @@
 import { db } from "@/db";
-import { productsTable } from "@/db/schema";
+import { Product, productsTable } from "@/db/schema";
+import { vectorize } from "@/lib/vectorize";
+import { Index } from "@upstash/vector";
 import { sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
@@ -8,6 +10,11 @@ interface PageProps {
     [key: string]: string | string[] | undefined;
   };
 }
+
+export type CoreProduct = Omit<Product, 'createdAt' | 'updatedAt'>;
+
+const index = new Index<CoreProduct>();
+
 const Page = async ({ searchParams }: PageProps) => {
   const query = await searchParams.query;
 
@@ -16,7 +23,7 @@ const Page = async ({ searchParams }: PageProps) => {
   }
 
   // full text search
-  let products = await db
+  let products: CoreProduct[] = await db
     .select()
     .from(productsTable)
     .where(
@@ -28,7 +35,26 @@ const Page = async ({ searchParams }: PageProps) => {
         .join(" & ")}))`
     ).limit(3)
 
-  console.log("Getting all users from the database: ", products);
+  if(products.length < 3) {
+    // Search for products that contain the query in the title or description
+    const vector = await vectorize(query)
+
+    const response = await index.query({
+      topK: 5,
+      vector,
+      includeMetadata: true,
+    })
+
+    const vectorProducts = response.filter((existingProduct) => {
+      if(products.some((product) => product.id === existingProduct.id) || existingProduct.score < 0.9) {
+        return false;
+      }else{
+        return true;
+      }
+    }).map(({metadata}) => metadata!)
+    
+    products.push(...vectorProducts)
+  }
 
   return (
     <pre>
