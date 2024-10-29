@@ -2,8 +2,11 @@
 
 **Table of Contents**
 
-- HomePage
-- Search
+- HomePage 
+    - To display the products preview upon the search
+- Search 
+    - intuitive
+    - functional (like when press the search it'll put the search in the url & keep the progress even after reload the page)
 - Product Preview
 
 ## Getting Started
