@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { neon } from '@neondatabase/serverless'
 import { Index } from '@upstash/vector'
 import { drizzle } from 'drizzle-orm/neon-http'
-
+import { vectorize } from '../lib/vectorize'
 import { productsTable } from './schema'
 
 
@@ -139,6 +139,18 @@ async function seed() {
 
   products.forEach(async (product) => {
     await db.insert(productsTable).values(product).onConflictDoNothing()
+
+    await index.upsert({
+      id: product.id!,
+      vector: await vectorize(`${product.title}: ${product.description}`),
+      metadata: {
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageId: product.imageId,
+      },
+    })
   })
 }
 
