@@ -5,7 +5,6 @@ const Page = () => {
     <>
       <div>
         {/* Your content here */}
-        SCOUT
       </div>
     </>
   );

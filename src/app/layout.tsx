@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Image from "next/image";
+import SearchBar from "@/components/SearchBar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -74,7 +75,7 @@ export default function RootLayout({
               </p>
 
               <div className="mx-auto mt-16 w-full max-w-2xl flex flex-col">
-                {/* <SearchBar/> */}
+                <SearchBar/>
 
                 {children}
               </div>
