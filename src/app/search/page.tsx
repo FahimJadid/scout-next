@@ -3,6 +3,7 @@ import { Product, productsTable } from "@/db/schema";
 import { vectorize } from "@/lib/vectorize";
 import { Index } from "@upstash/vector";
 import { sql } from "drizzle-orm";
+import { X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -62,6 +63,19 @@ const Page = async ({ searchParams }: PageProps) => {
       .map(({ metadata }) => metadata!);
 
     products.push(...vectorProducts);
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className='text-center py-4 bg-white shadow-md rounded-b-md'>
+        <X className='mx-auto h-8 w-8 text-gray-400' />
+        <h3 className='mt-2 text-sm font-semibold text-gray-900'>No results</h3>
+        <p className='mt-1 text-sm mx-auto max-w-prose text-gray-500'>
+          Sorry, we couldn't find any matches for{' '}
+          <span className='text-green-600 font-medium'>{query}</span>.
+        </p>
+      </div>
+    )
   }
 
   return (
