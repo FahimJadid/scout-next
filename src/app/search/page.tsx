@@ -19,25 +19,29 @@ export type CoreProduct = Omit<Product, "createdAt" | "updatedAt">;
 const index = new Index<CoreProduct>();
 
 const Page = async ({ searchParams }: PageProps) => {
-  const query = await searchParams.query;
+  const params = await searchParams;
+  const query = params.query;
 
   if (Array.isArray(query) || !query) {
     return redirect(`/`);
   }
 
   // full text search
-  let products: CoreProduct[] = await db
-    .select()
-    .from(productsTable)
-    .where(
-      sql`to_tsvector('simple', lower(${productsTable.title} || ' ' || ${
-        productsTable.description
-      })) @@ to_tsquery('simple', lower(${query
-        .trim()
-        .split(" ")
-        .join(" & ")}))`
-    )
-    .limit(3);
+
+  let products: CoreProduct[] = [];
+
+  try {
+    // full text search
+    products = await db
+      .select()
+      .from(productsTable)
+      .where(
+        sql`to_tsvector('simple', lower(${productsTable.title} || ' ' || ${productsTable.description})) @@ to_tsquery('simple', lower(${query.trim().split(" ").join(" & ")}))`
+      )
+      .limit(3);
+  } catch (error) {
+    console.error("Error connecting to database:", error);
+  }
 
   if (products.length < 3) {
     // Search for products that contain the query in the title or description
@@ -87,6 +91,7 @@ const Page = async ({ searchParams }: PageProps) => {
               <Image
                 loading="eager"
                 fill
+                sizes="(max-width: 640px) 100vw, 640px"
                 alt="product-image"
                 src={`/${product.imageId}`}
               />

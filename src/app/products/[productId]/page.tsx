@@ -14,7 +14,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-    const { productId } = params;
+    const { productId } = await params;
 
     if(!productId) return notFound()
 
