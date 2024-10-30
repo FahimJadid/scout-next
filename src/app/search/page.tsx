@@ -17,8 +17,7 @@ export type CoreProduct = Omit<Product, "createdAt" | "updatedAt">;
 const index = new Index<CoreProduct>();
 
 const Page = async ({ searchParams }: PageProps) => {
-  const params = await searchParams;
-  const query = params.query;
+  const query = searchParams.query;
 
   if (Array.isArray(query) || !query) {
     return redirect(`/`);
