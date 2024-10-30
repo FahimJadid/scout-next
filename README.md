@@ -1,5 +1,7 @@
 # Scout
 
+A cutting-edge search engine that combines the speed of Postgres full-text search with the precision of semantic querying, delivering fast and highly accurate search results.
+
 ## Quick Planning for Scout
 
 **Table of Contents**
@@ -12,8 +14,6 @@
 - Product Preview
 
 ## Getting Started
-
-A cutting-edge search engine that combines the speed of Postgres full-text search with the precision of semantic querying, delivering fast and highly accurate search results.
 
 ## Setup
 

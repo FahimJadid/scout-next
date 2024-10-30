@@ -9,7 +9,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export type CoreProduct = Omit<Product, "createdAt" | "updatedAt">;
@@ -17,7 +17,8 @@ export type CoreProduct = Omit<Product, "createdAt" | "updatedAt">;
 const index = new Index<CoreProduct>();
 
 const Page = async ({ searchParams }: PageProps) => {
-  const query = searchParams.query;
+  const params = await searchParams;
+  const query = params.query;
 
   if (Array.isArray(query) || !query) {
     return redirect(`/`);
