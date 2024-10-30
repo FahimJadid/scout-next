@@ -8,9 +8,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     productId: string;
-  };
+  }>;
 }
 
 const Page = async ({ params }: PageProps) => {
