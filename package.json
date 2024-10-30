@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "db:seed": "tsx ./src/db/seed.ts",
-    "lint": "next lint",
-    "postinstall": "npm install --legacy-peer-deps"
+    "lint": "next lint"
   },
   "dependencies": {
     "@huggingface/inference": "^2.8.1",
