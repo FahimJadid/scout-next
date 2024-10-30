@@ -9,9 +9,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 interface PageProps {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export type CoreProduct = Omit<Product, "createdAt" | "updatedAt">;
@@ -36,16 +34,23 @@ const Page = async ({ searchParams }: PageProps) => {
       .select()
       .from(productsTable)
       .where(
-        sql`to_tsvector('simple', lower(${productsTable.title} || ' ' || ${productsTable.description})) @@ to_tsquery('simple', lower(${query.trim().split(" ").join(" & ")}))`
+        sql`to_tsvector('simple', lower(${productsTable.title} || ' ' || ${
+          productsTable.description
+        })) @@ to_tsquery('simple', lower(${query
+          .trim()
+          .split(" ")
+          .join(" & ")}))`
       )
       .limit(3);
   } catch (error) {
     console.error("Error connecting to database:", error);
     return (
-      <div className='text-center py-4 bg-white shadow-md rounded-b-md'>
-        <X className='mx-auto h-8 w-8 text-gray-400' />
-        <h3 className='mt-2 text-sm font-semibold text-gray-900'>Database Error</h3>
-        <p className='mt-1 text-sm mx-auto max-w-prose text-gray-500'>
+      <div className="text-center py-4 bg-white shadow-md rounded-b-md">
+        <X className="mx-auto h-8 w-8 text-gray-400" />
+        <h3 className="mt-2 text-sm font-semibold text-gray-900">
+          Database Error
+        </h3>
+        <p className="mt-1 text-sm mx-auto max-w-prose text-gray-500">
           Sorry, we unable to connect to the database. Please try again later.
         </p>
       </div>
@@ -80,15 +85,15 @@ const Page = async ({ searchParams }: PageProps) => {
 
   if (products.length === 0) {
     return (
-      <div className='text-center py-4 bg-white shadow-md rounded-b-md'>
-        <X className='mx-auto h-8 w-8 text-gray-400' />
-        <h3 className='mt-2 text-sm font-semibold text-gray-900'>No results</h3>
-        <p className='mt-1 text-sm mx-auto max-w-prose text-gray-500'>
+      <div className="text-center py-4 bg-white shadow-md rounded-b-md">
+        <X className="mx-auto h-8 w-8 text-gray-400" />
+        <h3 className="mt-2 text-sm font-semibold text-gray-900">No results</h3>
+        <p className="mt-1 text-sm mx-auto max-w-prose text-gray-500">
           Sorry, we could not find any matches for your:
-          <span className='text-green-600 font-medium'>{query}</span>.
+          <span className="text-green-600 font-medium">{query}</span>.
         </p>
       </div>
-    )
+    );
   }
 
   return (
