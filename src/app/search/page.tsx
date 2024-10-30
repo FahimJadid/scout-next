@@ -41,6 +41,15 @@ const Page = async ({ searchParams }: PageProps) => {
       .limit(3);
   } catch (error) {
     console.error("Error connecting to database:", error);
+    return (
+      <div className='text-center py-4 bg-white shadow-md rounded-b-md'>
+        <X className='mx-auto h-8 w-8 text-gray-400' />
+        <h3 className='mt-2 text-sm font-semibold text-gray-900'>Database Error</h3>
+        <p className='mt-1 text-sm mx-auto max-w-prose text-gray-500'>
+          Sorry, we unable to connect to the database. Please try again later.
+        </p>
+      </div>
+    );
   }
 
   if (products.length < 3) {
@@ -75,7 +84,7 @@ const Page = async ({ searchParams }: PageProps) => {
         <X className='mx-auto h-8 w-8 text-gray-400' />
         <h3 className='mt-2 text-sm font-semibold text-gray-900'>No results</h3>
         <p className='mt-1 text-sm mx-auto max-w-prose text-gray-500'>
-          Sorry, we couldn't find any matches for{' '}
+          Sorry, we couldn't find any matches for
           <span className='text-green-600 font-medium'>{query}</span>.
         </p>
       </div>
